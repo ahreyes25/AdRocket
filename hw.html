@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>Business Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light container-fluid" style="position:fixed;">
+      <a class="navbar-brand">Analytics</a>
+      <img id="navbar-image" class="navbar-image" style="visibility:hidden;" src="">
+      <ul class="navbar-nav" style="flex-direction: row;">
+        <li id="facebook-button" onclick="googleAJAX()" class="nav-item disabled">
+          <a href="#" class="nav-link">Facebook</a>
+        </li>
+        <li id="google-button" class="nav-item disabled">
+          <a href="#" class="nav-link">Google</a>
+        </li>
+      </ul>
+    </nav>
+    <div style="height: 60px;"></div> <!-- Filler Container -->
+   
+    <div id="master-container"></div>
+    <div id="data-template" class="container-fluid container-minimal">
+      <div id="data-info" class="placement-banner">
+        <h id="info"></h>
+      </div>
+      <div id="data-cards" class="card-container"></div>
+      <div id="data-progress" class="progress-container"></div>
+    </div>
+    <div id="card-template" class="card-minimal template">
+      <h6 id="card-title" class="card-subtitle mb-2 text-muted"></h6>
+      <h4 id="card-value" class="card-title"></h4>
+    </div>
+    <div id="progress-template" class="progress template">
+      <div id="bar" class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div id="page-template" class="template">
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+    </div>
+  </body>
+</html>
