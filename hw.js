@@ -1,9 +1,7 @@
-var showFacebookData = false;
-var showGoogleData = false;
 var loadingFacebook = true;
 var loadingGoogle = true;
 var currentPage = "google";
-var transitioningPage = true;
+var currentPageIndex = 0;
 
 businessInfoAJAX();
 facebookAJAX();
@@ -11,61 +9,48 @@ googleAJAX();
 
 // p5.js update method
 function draw() {
-  // Check for facebook-button clicked
-  $('li#facebook-button').click(function() {
-    showFacebookData = true;
-    showGoogleData = false;
-    transitioningPage = true;
-  });
-
-  // Check for facebook-button clicked
-  $('li#google-button').click(function() {
-    showGoogleData = true;
-    showFacebookData = false;
-    transitioningPage = true;
-  });
-
-  // Loading Icon
-  if (showFacebookData) {
-    if (loadingFacebook) {
-      $('div#master-container').addClass('loader');
-    }
-    else {
-      $('div#master-container').removeClass('loader');
-      transitioningPage = true;
-    }
-    showFacebookData = false;
-    currentPage = "facebook";
+	// Loading Icon
+  if (loadingFacebook && currentPage == "facebook") {
+    $('div#master-container').addClass('loader');
   }
+  else {
+    $('div#master-container').removeClass('loader');
 
-  // Loading Icon
-  if (showGoogleData) {
-    if (loadingGoogle) {
-      $('div#master-container').addClass('loader');
+    if (currentPage == "facebook") {
+      $('[id*="facebook-container-"]').show();
     }
-    else {
-      $('div#master-container').removeClass('loader');
-      transitioningPage = true;
-    }
-    showGoogleData = false;
-    currentPage = "google";
-  }
-  
-  // Show Data
-  if (currentPage == "facebook" && transitioningPage) {
-    $('[id*="facebook-container-"]').show();
-    $('[id*="google-container-"]').hide();
-    transitioningPage = false;
-  }
-  else if (currentPage == "google" && transitioningPage) {
-    $('[id*="facebook-container-"]').hide();
-    $('[id*="google-container-"]').show();
-    transitioningPage = false;
   }
 }
 
 // Pagination
-function pagination(container, numberOfPages) {
+function pagination(numberOfPages) {
+	// Append tabs for each element
+	for (var i = 0; i < numberOfPages; i++) {
+  	$('.pagination').append("<li class='page-item drop-shadow'><a class='page-link' href='javascript:void(0)'>" + i + "</a></li>");
+  }
+  
+  // Check for clicks on page tab
+	$(".pagination li.page-item").on("click", function() {
+	  if ($(this).hasClass('active')) {
+  	  return false;
+    }
+    else {
+    	var currentPage = $(this).index();
+      currentPageIndex = currentPage;
+    	$(".pagination li").removeClass('active');
+    	$(this).addClass('active');
+      
+      // Activate specified one and deactivate others
+      for (var j = 0; j < numberOfPages; j++) {
+      	if (j == currentPage) {
+		      $('div#google-container-' + String(currentPage)).show();
+        }
+        else {
+        	$('div#google-container-' + String(j)).hide();
+        }
+      }
+  	}
+	});
 }
 
 // Render the json data into the specified container element
@@ -171,6 +156,59 @@ function renderData(json, container) {
         }
       }
     }
+    
+    // Setup everything on initial load
+    if (container == "google-container") {
+	    pagination(performanceData.length);
+      
+      $('[id*="google-container-"]').show();
+      $('[id*="facebook-container-"]').hide();
+      $('[id*="pagination"]').show();
+      
+      // Activate specified one and deactivate others
+      for (var j = 0; j < performanceData.length; j++) {
+      	if (j == currentPageIndex) {
+		      $('div#google-container-' + String(j)).show();
+        }
+        else {
+        	$('div#google-container-' + String(j)).hide();
+        }
+      }
+    }
+    else if (container == "facebook-container") {
+      $('[id*="facebook-container-"]').hide();
+      
+      if (currentPage == "facebook") {
+	      $('[id*="pagination"]').hide();
+      }
+    }
+    
+    // Setup Event Listeners
+    $('li#facebook-button').on("click", function() {
+    	$('[id*="facebook-container-"]').show();
+      $('[id*="google-container-"]').hide();
+      $('[id*="pagination"]').hide();
+      currentPage = "facebook";
+      currentPageIndex = 0;
+    });
+    
+    $('li#google-button').on("click", function() {
+    	$('[id*="google-container-"]').show();
+      $('[id*="facebook-container-"]').hide();
+      $('[id*="pagination"]').show();
+      currentPage = "google";
+      currentPageIndex = 0;
+      
+      // Activate specified one and deactivate others
+      for (var j = 0; j < performanceData.length; j++) {
+      	if (j == currentPageIndex) {
+		      $('div#google-container-' + String(j)).show();
+        }
+        else {
+        	$('div#google-container-' + String(j)).hide();
+        }
+      }
+    });
   });
 }
 
@@ -188,12 +226,7 @@ function facebookAJAX() {
           setTimeout(function() {
           //run code here
           renderData(json, 'facebook-container');
-          
           loadingFacebook = false;
-          transitioningPage = true;
-          if (currentPage == "facebook") {
-            showFacebookData = true;
-          }
             }, 5000);
         },
         error:function(error){
@@ -215,8 +248,6 @@ function googleAJAX() {
         setTimeout(function() {
         //run code here
         renderData(json, 'google-container');
-        
-        transitioningPage = true;
         loadingGoogle = false;
           }, 100);
         },

@@ -8,6 +8,11 @@
   overflow: hidden;
 }
 
+.drop-shadow {
+  box-shadow: 1px 1px 1px 1px #e8ecf2;
+  border-radius: 5px;
+}
+
 .card-minimal {
   margin: 10px;
   width: 100px;
@@ -40,7 +45,6 @@
 
 .template {
   visibility: hidden;
-  display: none;
 }
 
 .placement-banner {
