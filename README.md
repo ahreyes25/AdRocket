@@ -1,2 +1,2 @@
 # AdRocket
-adrocket Interview Assignment
+Basic Front-End Design Project that utilizes HTML, CSS, AJAX, jQuery, and Bootstrap.
